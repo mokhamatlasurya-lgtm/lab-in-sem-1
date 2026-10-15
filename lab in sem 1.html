@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LearnSpace | Online Learning</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #17223b;
+      --muted: #667085;
+      --primary: #5b5ce2;
+      --primary-dark: #4445c8;
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --line: #e8eaf2;
+    }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.5;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    .container { width: min(1120px, 92%); margin: auto; }
+
+    /* FLEXBOX: header layout */
+    header {
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .navbar {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .logo { font-size: 1.45rem; font-weight: 800; color: var(--primary); }
+    .nav-links { display: flex; align-items: center; gap: 26px; color: #475467; }
+    .nav-links a:hover { color: var(--primary); }
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+    .btn {
+      display: inline-block;
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .2s, background .2s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-light { background: #efefff; color: var(--primary); }
+
+    .hero { padding: 68px 0 58px; }
+    /* FLEXBOX: two-column hero section */
+    .hero-inner { display: flex; align-items: center; justify-content: space-between; gap: 48px; }
+    .hero-copy { flex: 1 1 52%; }
+    .eyebrow {
+      display: inline-block; padding: 6px 12px; border-radius: 99px;
+      background: #ececff; color: var(--primary); font-size: .85rem; font-weight: 700;
+      margin-bottom: 18px;
+    }
+    h1 { font-size: clamp(2.4rem, 5vw, 4rem); line-height: 1.08; letter-spacing: -1.8px; margin-bottom: 20px; }
+    h1 span { color: var(--primary); }
+    .hero-copy p { color: var(--muted); font-size: 1.08rem; max-width: 540px; margin-bottom: 26px; }
+    .hero-buttons { display: flex; flex-wrap: wrap; gap: 12px; }
+    .hero-art {
+      flex: 1 1 42%; min-height: 310px; border-radius: 28px; padding: 28px;
+      background: linear-gradient(135deg, #dfe0ff, #f3e7ff);
+      display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;
+    }
+    .learning-card {
+      width: min(100%, 340px); padding: 24px; background: rgba(255,255,255,.9);
+      border-radius: 22px; box-shadow: 0 22px 55px #5555a322; transform: rotate(-3deg);
+    }
+    .learning-icon { font-size: 2.6rem; margin-bottom: 12px; }
+    .learning-card h3 { margin-bottom: 6px; }
+    .learning-card p { color: var(--muted); font-size: .92rem; }
+    .progress-label { display: flex; justify-content: space-between; font-size: .82rem; margin: 20px 0 8px; }
+    .progress { height: 9px; border-radius: 99px; background: #e9eaf5; overflow: hidden; }
+    .progress span { display: block; width: 72%; height: 100%; background: var(--primary); border-radius: inherit; }
+
+    .stats { padding: 0 0 38px; }
+    /* FLEXBOX: evenly spaced stats */
+    .stats-row { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 18px; padding: 24px; background: #fff; border: 1px solid var(--line); border-radius: 18px; }
+    .stat { text-align: center; min-width: 130px; }
+    .stat strong { display: block; font-size: 1.6rem; color: var(--primary); }
+    .stat span { color: var(--muted); font-size: .9rem; }
+
+    section.content-section { padding: 48px 0 64px; }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 26px; }
+    .section-heading h2 { font-size: clamp(1.7rem, 3vw, 2.3rem); margin-bottom: 5px; }
+    .section-heading p { color: var(--muted); }
+    .search-box { width: min(100%, 290px); padding: 12px 14px; border: 1px solid #dfe2ec; border-radius: 10px; outline: none; background: #fff; }
+    .search-box:focus { border-color: var(--primary); box-shadow: 0 0 0 3px #5b5ce21c; }
+
+    /* CSS GRID: responsive course cards */
+    .course-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+    .course-card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; transition: transform .2s, box-shadow .2s; }
+    .course-card:hover { transform: translateY(-5px); box-shadow: 0 18px 35px #1d2b5010; }
+    .course-cover { min-height: 150px; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; }
+    .cover-code { background: linear-gradient(135deg, #d9f5ee, #bce9e0); }
+    .cover-design { background: linear-gradient(135deg, #ffe8cf, #ffd2b4); }
+    .cover-data { background: linear-gradient(135deg, #e5e0ff, #d1ccff); }
+    .cover-business { background: linear-gradient(135deg, #dcecff, #bddcff); }
+    .cover-marketing { background: linear-gradient(135deg, #ffe0ec, #ffc5dc); }
+    .cover-photo { background: linear-gradient(135deg, #e2f5d4, #c6e9b1); }
+    .course-body { padding: 20px; }
+    .course-tag { display: inline-block; font-size: .76rem; font-weight: 700; color: var(--primary); background: #f0f0ff; border-radius: 6px; padding: 4px 8px; margin-bottom: 10px; }
+    .course-body h3 { margin-bottom: 8px; font-size: 1.12rem; }
+    .course-body p { color: var(--muted); font-size: .92rem; min-height: 44px; }
+    .course-meta { display: flex; justify-content: space-between; gap: 10px; color: var(--muted); font-size: .84rem; margin: 16px 0; }
+    .course-bottom { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 14px; border-top: 1px solid var(--line); }
+    .price { font-size: 1.15rem; font-weight: 800; }
+    .course-bottom .btn { padding: 9px 12px; font-size: .88rem; }
+
+    .cta { padding: 0 0 70px; }
+    .cta-panel { background: var(--ink); color: #fff; padding: 38px; border-radius: 22px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .cta-panel p { color: #c8ccda; margin-top: 8px; }
+    footer { background: #fff; border-top: 1px solid var(--line); padding: 25px 0; color: var(--muted); }
+    .footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+
+    @media (max-width: 850px) {
+      .nav-links { gap: 14px; }
+      .hero-inner { gap: 25px; }
+      .course-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 650px) {
+      .navbar { padding: 16px 0; flex-wrap: wrap; }
+      .nav-links { order: 3; width: 100%; justify-content: space-between; gap: 10px; font-size: .9rem; }
+      .nav-actions .btn-light { display: none; }
+      .hero { padding-top: 42px; }
+      .hero-inner { flex-direction: column; align-items: stretch; }
+      .hero-art { min-height: 270px; }
+      .section-heading { align-items: stretch; flex-direction: column; }
+      .search-box { width: 100%; }
+      .course-grid { grid-template-columns: 1fr; }
+      .cta-panel { align-items: flex-start; flex-direction: column; padding: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="container navbar" aria-label="Main navigation">
+      <a class="logo" href="#">LearnSpace.</a>
+      <div class="nav-links">
+        <a href="#courses">Courses</a>
+        <a href="#why-us">Why LearnSpace?</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="nav-actions">
+        <a class="btn btn-light" href="#courses">Explore</a>
+        <a class="btn btn-primary" href="#courses">Get Started</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <span class="eyebrow">Learn something new every day</span>
+          <h1>Build skills for your <span>bright future.</span></h1>
+          <p>Discover practical courses, learn from experienced instructors, and turn your curiosity into skills you can use.</p>
+          <div class="hero-buttons">
+            <a class="btn btn-primary" href="#courses">Browse Courses →</a>
+            <a class="btn btn-light" href="#why-us">How it works</a>
+          </div>
+        </div>
+        <div class="hero-art" aria-label="Featured learning progress card">
+          <div class="learning-card">
+            <div class="learning-icon">🎓</div>
+            <h3>Your learning journey</h3>
+            <p>Small steps today. Big results tomorrow.</p>
+            <div class="progress-label"><span>Weekly progress</span><strong>72%</strong></div>
+            <div class="progress"><span></span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats" id="why-us">
+      <div class="container stats-row">
+        <div class="stat"><strong>120+</strong><span>Expert courses</span></div>
+        <div class="stat"><strong>25k+</strong><span>Happy learners</span></div>
+        <div class="stat"><strong>40+</strong><span>Expert mentors</span></div>
+        <div class="stat"><strong>4.8/5</strong><span>Learner rating</span></div>
+      </div>
+    </section>
+
+    <section class="content-section" id="courses">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <h2>Explore popular courses</h2>
+            <p>Find the right course for your next big step.</p>
+          </div>
+          <input id="courseSearch" class="search-box" type="search" placeholder="Search courses..." aria-label="Search courses" />
+        </div>
+        <div class="course-grid" id="courseGrid">
+          <article class="course-card" data-title="web development html css javascript">
+            <div class="course-cover cover-code">💻</div>
+            <div class="course-body">
+              <span class="course-tag">DEVELOPMENT</span>
+              <h3>Web Development Basics</h3>
+              <p>Learn HTML, CSS, and JavaScript by building your first website.</p>
+              <div class="course-meta"><span>◷ 8 weeks</span><span>★ 4.9</span></div>
+              <div class="course-bottom"><span class="price">₹999</span><a class="btn btn-primary enroll" href="#contact">Enroll now</a></div>
+            </div>
+          </article>
+          <article class="course-card" data-title="ui ux design figma">
+            <div class="course-cover cover-design">🎨</div>
+            <div class="course-body">
+              <span class="course-tag">DESIGN</span>
+              <h3>UI/UX Design Essentials</h3>
+              <p>Design clean, user-friendly digital experiences from scratch.</p>
+              <div class="course-meta"><span>◷ 6 weeks</span><span>★ 4.8</span></div>
+              <div class="course-bottom"><span class="price">₹799</span><a class="btn btn-primary enroll" href="#contact">Enroll now</a></div>
+            </div>
+          </article>
+          <article class="course-card" data-title="data science python analytics">
+            <div class="course-cover cover-data">📊</div>
+            <div class="course-body">
+              <span class="course-tag">DATA SCIENCE</span>
+              <h3>Data Science with Python</h3>
+              <p>Explore data, create visualizations, and discover useful insights.</p>
+              <div class="course-meta"><span>◷ 10 weeks</span><span>★ 4.9</span></div>
+              <div class="course-bottom"><span class="price">₹1,299</span><a class="btn btn-primary enroll" href="#contact">Enroll now</a></div>
+            </div>
+          </article>
+          <article class="course-card" data-title="business management leadership">
+            <div class="course-cover cover-business">📈</div>
+            <div class="course-body">
+              <span class="course-tag">BUSINESS</span>
+              <h3>Business Fundamentals</h3>
+              <p>Build a foundation in planning, teamwork, and decision-making.</p>
+              <div class="course-meta"><span>◷ 5 weeks</span><span>★ 4.7</span></div>
+              <div class="course-bottom"><span class="price">₹699</span><a class="btn btn-primary enroll" href="#contact">Enroll now</a></div>
+            </div>
+          </article>
+          <article class="course-card" data-title="digital marketing seo social media">
+            <div class="course-cover cover-marketing">📣</div>
+            <div class="course-body">
+              <span class="course-tag">MARKETING</span>
+              <h3>Digital Marketing Starter</h3>
+              <p>Understand SEO, content strategy, and social media campaigns.</p>
+              <div class="course-meta"><span>◷ 4 weeks</span><span>★ 4.8</span></div>
+              <div class="course-bottom"><span class="price">₹599</span><a class="btn btn-primary enroll" href="#contact">Enroll now</a></div>
+            </div>
+          </article>
+          <article class="course-card" data-title="photography photo editing">
+            <div class="course-cover cover-photo">📷</div>
+            <div class="course-body">
+              <span class="course-tag">CREATIVE</span>
+              <h3>Photography Fundamentals</h3>
+              <p>Learn composition, lighting, and how to tell stories with images.</p>
+              <div class="course-meta"><span>◷ 3 weeks</span><span>★ 4.7</span></div>
+              <div class="course-bottom"><span class="price">₹499</span><a class="btn btn-primary enroll" href="#contact">Enroll now</a></div>
+            </div>
+          </article>
+        </div>
+        <p id="noResults" style="display:none; color:var(--muted); margin-top:20px;">No courses found. Try another search.</p>
+      </div>
+    </section>
+
+    <section class="cta" id="contact">
+      <div class="container cta-panel">
+        <div>
+          <h2>Ready to start learning?</h2>
+          <p>Choose a course and take the next step toward your goals.</p>
+        </div>
+        <a class="btn btn-primary" href="#courses">Find your course →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <a class="logo" href="#">LearnSpace.</a>
+      <span>© 2026 LearnSpace. Built for curious minds.</span>
+    </div>
+  </footer>
+
+  <script>
+    const searchInput = document.getElementById('courseSearch');
+    const cards = [...document.querySelectorAll('.course-card')];
+    const noResults = document.getElementById('noResults');
+
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value.trim().toLowerCase();
+      let visibleCount = 0;
+      cards.forEach(card => {
+        const matches = card.dataset.title.includes(query);
+        card.style.display = matches ? '' : 'none';
+        if (matches) visibleCount++;
+      });
+      noResults.style.display = visibleCount ? 'none' : 'block';
+    });
+
+    document.querySelectorAll('.enroll').forEach(button => {
+      button.addEventListener('click', event => {
+        event.preventDefault();
+        const courseName = button.closest('.course-card').querySelector('h3').textContent;
+        alert(`Thanks for your interest in "${courseName}"! Enrollment demo only.`);
+      });
+    });
+  </script>
+</body>
+</html>
